@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import "./globals.css";
 import { SITE } from "@/data/site";
 
@@ -26,6 +27,16 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
+        {/* バリューコマース LinkSwitch：shopping.yahoo.co.jp 等のリンクを自動でアフィリエイト化。
+            同一 strategy のスクリプトは記述順に実行されるため、vc_pid 定義 → vcdal.js の順に置く */}
+        <Script id="vc-linkswitch-pid" strategy="afterInteractive">
+          {`var vc_pid = "886164126";`}
+        </Script>
+        <Script
+          src="https://aml.valuecommerce.com/vcdal.js"
+          strategy="afterInteractive"
+        />
+
         <header className="site-header">
           <div className="site-mark">オトナ服ナビ</div>
           <div className="site-sub">F O R &nbsp; M E N &nbsp; 3 0 – 5 0</div>
