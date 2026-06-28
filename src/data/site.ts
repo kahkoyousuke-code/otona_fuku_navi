@@ -5,8 +5,8 @@
 export const SITE = {
   name: "オトナ服ナビ",
   // 公開URL（OGP画像のベースURL等に使用）。独自ドメインは取らない方針。
-  // ★要編集：Vercelデプロイ後に割り当てられる https://◯◯◯.vercel.app を入れる
-  url: "https://otona-fuku-navi.example.com",
+  // Vercelデプロイ先。末尾スラッシュなし（new URL() のベースに使うため）
+  url: "https://otona-fuku-navi.vercel.app",
   // 運営者名（個人名 or 屋号）。
   operator: "オトナ服ナビ編集部",
   // 問い合わせフォームのURL（Googleフォーム等）。★要編集（フォーム作成後に差し替える）
