@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大人の服選び診断</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f0e8;
+    --paper-2:#ece6d9;
+    --ink:#211e19;
+    --ink-soft:#5c564c;
+    --ink-faint:#8a8273;
+    --line:#d8d0c0;
+    --accent:#9a7b4f;
+    --accent-dark:#6f5734;
+    --white:#fbf9f4;
+    --serif:"Shippori Mincho",serif;
+    --sans:"Zen Kaku Gothic New",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .wrap{
+    width:100%;
+    max-width:560px;
+    margin:0 auto;
+    padding:0 24px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  header.site{ text-align:center; padding:36px 0 8px; }
+  header.site .mark{ font-family:var(--serif); font-weight:600; font-size:20px; letter-spacing:.18em; }
+  header.site .sub{ font-size:11px; letter-spacing:.32em; color:var(--ink-faint); margin-top:4px; }
+  .stage{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 0 56px}
+  .fade{animation:fade .5s ease both}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .hero{text-align:center;padding:24px 0}
+  .hero .lead{ font-family:var(--serif); font-size:30px; font-weight:600; line-height:1.55; letter-spacing:.02em; }
+  .hero .lead em{font-style:normal;color:var(--accent-dark)}
+  .hero p{ color:var(--ink-soft); font-size:15px; margin-top:20px; }
+  .meta{ display:flex;justify-content:center;gap:28px; margin:32px 0 36px; color:var(--ink-faint); font-size:12px;letter-spacing:.1em; }
+  .meta span b{display:block;font-family:var(--serif);font-size:22px;color:var(--ink);font-weight:600;letter-spacing:0}
+  .btn{ display:inline-block; font-family:var(--sans); font-size:15px; letter-spacing:.12em; border:none; cursor:pointer; transition:.25s; }
+  .btn-primary{ background:var(--ink); color:var(--paper); padding:16px 44px; border-radius:2px; }
+  .btn-primary:hover{background:var(--accent-dark)}
+  .btn-ghost{ background:transparent; color:var(--ink); border:1px solid var(--line); padding:14px 24px; border-radius:2px; width:100%; text-align:center; }
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent-dark)}
+
+  .progress{display:flex;gap:6px;margin-bottom:30px}
+  .progress i{height:2px;flex:1;background:var(--line);border-radius:2px;transition:.4s}
+  .progress i.on{background:var(--accent)}
+  .q-count{font-size:12px;letter-spacing:.2em;color:var(--ink-faint);margin-bottom:10px}
+  .q-title{ font-family:var(--serif); font-size:23px; font-weight:600; line-height:1.6; margin-bottom:28px; }
+  .options{display:flex;flex-direction:column;gap:12px}
+  .opt{ background:var(--white); border:1px solid var(--line); border-radius:3px; padding:18px 20px; text-align:left; font-size:15px; color:var(--ink); cursor:pointer; transition:.2s; display:flex; align-items:center; gap:14px; width:100%; font-family:var(--sans); }
+  .opt:hover{border-color:var(--accent);background:#fff}
+  .opt .k{ font-family:var(--serif); color:var(--accent); font-size:14px; width:18px;flex-shrink:0; }
+  .back{ margin-top:26px; background:none;border:none;cursor:pointer; color:var(--ink-faint);font-size:13px;font-family:var(--sans); letter-spacing:.06em; }
+  .back:hover{color:var(--ink)}
+
+  .result-top{text-align:center;padding:8px 0 22px}
+  .result-top .label{font-size:12px;letter-spacing:.3em;color:var(--ink-faint)}
+  .result-top .name{ font-family:var(--serif); font-size:30px; font-weight:700; margin:12px 0 14px; line-height:1.4; letter-spacing:.02em; }
+  .result-top .tagline{color:var(--accent-dark);font-size:14px;letter-spacing:.1em}
+
+  .illust{
+    width:100%;
+    aspect-ratio:3 / 4;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:30px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .illust img{width:100%;height:100%;object-fit:cover;display:block}
+  .illust .ph{ text-align:center;color:var(--ink-faint);font-size:13px;line-height:1.9;padding:24px; }
+  .illust .ph .fr{
+    font-family:var(--serif);font-size:15px;color:var(--ink-soft);
+    display:block;margin-bottom:8px;
+  }
+  .illust .cap{
+    position:absolute;left:0;right:0;bottom:0;
+    background:rgba(33,30,25,.62);
+    color:var(--paper);
+    font-size:12px;letter-spacing:.08em;
+    text-align:center;padding:8px;
+  }
+
+  .reason{ background:var(--paper-2); border-radius:3px; padding:22px 24px; font-size:15px; color:var(--ink-soft); line-height:1.9; margin:0 0 36px; }
+  .reason .pin{ display:block; color:var(--ink); font-size:14px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+
+  .sec-head{ display:flex;align-items:baseline;gap:12px;margin-bottom:6px; }
+  .sec-head h3{font-family:var(--serif);font-size:19px;font-weight:600}
+  .sec-head .scene{ font-size:11px;letter-spacing:.14em;color:var(--ink-faint); border:1px solid var(--line);border-radius:2px;padding:2px 8px; }
+  .sec-sub{font-size:12px;color:var(--ink-faint);margin-bottom:18px}
+
+  .item{ display:flex;gap:16px; border-top:1px solid var(--line); padding:20px 0; transition:.3s; }
+  .item.owned{opacity:.55}
+  .item .thumb{ width:72px;height:88px;flex-shrink:0; border:1px solid var(--line); background:var(--white); display:flex;align-items:center;justify-content:center; color:var(--ink-faint); position:relative; }
+  .item .thumb svg{width:34px;height:34px;stroke:var(--ink-faint);stroke-width:1.1;fill:none}
+  .item.owned .thumb::after{
+    content:"\2713"; position:absolute; inset:0;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(154,123,79,.16); color:var(--accent-dark);
+    font-size:26px;
+  }
+  .item .body{flex:1;min-width:0}
+  .item .body .nm{font-size:15px;font-weight:500;margin-bottom:3px}
+  .item .body .why{font-size:13px;color:var(--ink-soft);line-height:1.65;margin-bottom:8px}
+  .item .body .price{font-family:var(--serif);font-size:13px;color:var(--ink-faint);margin-bottom:10px}
+  .item .body .owned-msg{display:none;font-size:13px;color:var(--accent-dark);margin-bottom:10px}
+  .item.owned .body .price{display:none}
+  .item.owned .body .owned-msg{display:block}
+
+  .actions{display:flex;align-items:center;gap:16px}
+  .buy{ display:inline-block; font-size:13px;letter-spacing:.08em; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:2px; transition:.2s; }
+  .buy:hover{color:var(--accent-dark)}
+  .buy span{color:var(--accent)}
+  .item.owned .buy{display:none}
+  .have{ background:none;border:none;cursor:pointer; font-family:var(--sans);font-size:12px; color:var(--ink-faint); letter-spacing:.06em; display:flex;align-items:center;gap:5px; }
+  .have:hover{color:var(--ink)}
+  .have .box{width:13px;height:13px;border:1px solid var(--ink-faint);border-radius:2px;display:inline-block}
+  .item.owned .have .box{background:var(--accent);border-color:var(--accent)}
+  .item.owned .have{color:var(--accent-dark)}
+
+  .tally{
+    margin-top:30px;background:var(--ink);color:var(--paper);
+    border-radius:3px;padding:18px 22px;text-align:center;
+    font-size:14px;letter-spacing:.04em;
+  }
+  .tally b{font-family:var(--serif);font-size:18px;font-weight:600}
+  .tally.done{background:var(--accent-dark)}
+
+  .next{margin:30px 0 0;display:flex;flex-direction:column;gap:10px}
+  .note{ text-align:center;font-size:11px;color:var(--ink-faint); margin-top:26px;letter-spacing:.04em;line-height:1.7; }
+  footer.site{ text-align:center;padding:24px 0 30px; font-size:11px;letter-spacing:.18em;color:var(--ink-faint); border-top:1px solid var(--line); }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="mark">大人の服選び診断</div>
+  <div class="sub">F O R   M E N   3 0 – 5 0</div>
+</header>
+
+<div class="wrap">
+  <div class="stage" id="stage"></div>
+</div>
+
+<footer class="site">本ページは広告（アフィリエイト）を含みます</footer>
+
+<script>
+const QUESTIONS = [
+  { id:"taikei", title:"体つきは、どれに近いですか？",
+    options:[
+      {k:"A", label:"肩幅があって、がっしりしている", value:"gasshiri"},
+      {k:"B", label:"標準的だと思う", value:"hyojun"},
+      {k:"C", label:"お腹まわりが気になってきた", value:"onaka"},
+    ]},
+  { id:"funiki", title:"どんな雰囲気になりたいですか？",
+    options:[
+      {k:"A", label:"きちんと・きれいめに見せたい", value:"kireime"},
+      {k:"B", label:"リラックスした、こなれた感じ", value:"casual"},
+    ]},
+  { id:"basho", title:"服を着る場面は、どちらが多いですか？",
+    options:[
+      {k:"A", label:"仕事・きちんとした場が多い", value:"work"},
+      {k:"B", label:"休日・プライベートが多い", value:"off"},
+      {k:"C", label:"半々くらい", value:"both"},
+    ]},
+  { id:"nayami", title:"服選びで、一番こまることは？",
+    options:[
+      {k:"A", label:"似合うものが、よく分からない", value:"fit"},
+      {k:"B", label:"若作りに見えないか心配", value:"young"},
+      {k:"C", label:"選ぶのが、とにかく面倒", value:"tedious"},
+    ]},
+  { id:"yosan", title:"1着にかけられる予算は？",
+    options:[
+      {k:"A", label:"〜1万円くらい", value:"low"},
+      {k:"B", label:"1〜3万円くらい", value:"mid"},
+      {k:"C", label:"3万円以上でもよい", value:"high"},
+    ]},
+];
+
+const PRICE = { low:"〜10,000円", mid:"15,000〜30,000円", high:"30,000円〜" };
+const NAYAMI_LINE = {
+  fit:"似合うものが分からないなら、まずはこの3着から。大きく外しません。",
+  young:"落ち着いた色とサイズ感でまとめれば、若作りに見えず大人っぽく決まります。",
+  tedious:"あれこれ迷わなくて大丈夫。ひとまずこれだけ揃えれば形になります。",
+};
+const SCENE_LABEL = { work:"仕事の日に", off:"休日に", both:"オン・オフ兼用で" };
+
+const ICON = {
+  jacket:'<svg viewBox="0 0 24 24"><path d="M8 3l4 3 4-3 4 4-3 3v11H7V10L4 7z"/><path d="M12 6v15"/></svg>',
+  shirt:'<svg viewBox="0 0 24 24"><path d="M7 4l5 3 5-3 3 3-2 3v9H6v-9L4 7z"/></svg>',
+  pants:'<svg viewBox="0 0 24 24"><path d="M7 3h10l-1 18h-4l-1-9-1 9H5z"/></svg>',
+  shoe:'<svg viewBox="0 0 24 24"><path d="M3 16h13l4 2v2H3z"/><path d="M3 16v-5l4-1 2 3h4"/></svg>',
+  knit:'<svg viewBox="0 0 24 24"><path d="M6 5h12l2 4-3 2v9H7v-9L4 9z"/><path d="M9 5c0 2 6 2 6 0"/></svg>',
+};
+
+const RESULTS = {
+  "gasshiri-kireime":{
+    name:"がっしり × きれいめ", tagline:"端正に、骨格を活かす",
+    reason:"肩幅があってがっしりした体型は、それ自体が頼もしい長所です。体のラインを拾いすぎない、すっきりした直線的なシルエットを選ぶと、力強さが上品さに変わります。色は紺・チャコール・グレージュなど、落ち着いたトーンでまとめるのがコツです。",
+    items:[
+      {icon:"jacket", nm:"きれいめテーラードジャケット", why:"肩のラインに沿いつつ、余分なボリュームを抑えて端正に。"},
+      {icon:"pants",  nm:"細身のテーパードパンツ",       why:"足元を絞って、上半身の存在感とバランスをとります。"},
+      {icon:"shoe",   nm:"レザーのプレーントゥ",         why:"足元をきちんと締めると、全体が一気に上質に見えます。"},
+    ]},
+  "gasshiri-casual":{
+    name:"がっしり × カジュアル", tagline:"ラフでも、品を残す",
+    reason:"がっしりした体型でカジュアルに振るときは、だぼっとさせないのが鉄則です。ジャストサイズで、生地に少し上質感のあるものを選ぶと、ラフなのに大人に見えます。無地・アースカラー中心でまとめると失敗しません。",
+    items:[
+      {icon:"knit",  nm:"ハイゲージのニット",        why:"体に程よく沿う薄手のニットで、すっきり見せます。"},
+      {icon:"pants", nm:"きれいめスラックス（休日用）", why:"デニムより大人っぽく、がっしり体型と好相性。"},
+      {icon:"shoe",  nm:"白すぎないレザースニーカー", why:"カジュアルでも、革なら品が残ります。"},
+    ]},
+  "hyojun-kireime":{
+    name:"標準体型 × きれいめ", tagline:"いちばん、自由に着られる",
+    reason:"標準的な体型は、選択肢がいちばん広いタイプです。だからこそ「サイズが合っているか」で差が出ます。肩・着丈・パンツ丈をジャストに合わせるだけで、同じ服でも見違えます。きれいめなら、まず紺と白を軸にすると間違いありません。",
+    items:[
+      {icon:"jacket", nm:"紺のジャケット",       why:"一着で品が出る万能選手。サイズ合わせが命です。"},
+      {icon:"shirt",  nm:"白の上質なシャツ",      why:"清潔感の土台。襟がしっかりしたものを選びます。"},
+      {icon:"pants",  nm:"グレーのスラックス",     why:"紺のジャケットと合わせれば、それだけで様になります。"},
+    ]},
+  "hyojun-casual":{
+    name:"標準体型 × カジュアル", tagline:"力を抜いて、こなれる",
+    reason:"標準体型のカジュアルは、こなれ感を出しやすいタイプです。ポイントは「全身カジュアルにしすぎない」こと。どこか一点だけきれいめな要素を混ぜると、ぐっと大人に見えます。色数は3色までにまとめると、まとまりが出ます。",
+    items:[
+      {icon:"knit",  nm:"クルーネックのニット",   why:"一枚で決まる、休日の主役。首元がすっきり見えます。"},
+      {icon:"pants", nm:"きれいめのデニム",        why:"濃い色・細すぎない形なら、大人のカジュアルに。"},
+      {icon:"shoe",  nm:"レザースニーカー",        why:"スニーカーでも革素材を選ぶと、子どもっぽくなりません。"},
+    ]},
+  "onaka-kireime":{
+    name:"お腹まわり × きれいめ", tagline:"縦のラインで、すっきり",
+    reason:"お腹まわりが気になるときは、視線を「縦」に集めるのが効きます。前を開けて着られるジャケットや、Vネックで首元をあける工夫が有効です。体を締めつけるより、自然に体型を拾わないジャストサイズを選ぶのがコツ。濃いめの色も引き締めに役立ちます。",
+    items:[
+      {icon:"jacket", nm:"前を開けて着るジャケット", why:"縦のラインができて、お腹まわりが目立ちにくくなります。"},
+      {icon:"knit",  nm:"Vネックのニット",          why:"首元をあけると視線が上がり、すっきり見えます。"},
+      {icon:"pants", nm:"濃色のストレートパンツ",     why:"細すぎず太すぎず。濃い色で下半身を引き締めます。"},
+    ]},
+  "onaka-casual":{
+    name:"お腹まわり × カジュアル", tagline:"ゆるく、でも膨張させない",
+    reason:"お腹まわりが気になる人のカジュアルは「ゆったり=大きいサイズ」ではない、と知るだけで変わります。肩が合った、少しゆとりのある服を選ぶこと。横に広がって見える明るい色や横ボーダーは避け、無地の落ち着いた色でまとめると安心です。",
+    items:[
+      {icon:"shirt", nm:"羽織れるシャツジャケット", why:"前を開けて縦ラインを作りつつ、ラフに着られます。"},
+      {icon:"knit",  nm:"無地のスウェット",          why:"肩が合うジャストサイズを。明るすぎない色が安全です。"},
+      {icon:"pants", nm:"テーパードのイージーパンツ", why:"楽なのにだらしなく見えない、裾が細い形を選びます。"},
+    ]},
+};
+
+let step = 0;
+let answers = {};
+let owned = [false,false,false];
+const stage = document.getElementById("stage");
+
+function render(){
+  if(step === 0){ renderStart(); }
+  else if(step <= QUESTIONS.length){ renderQuestion(step-1); }
+  else { renderResult(); }
+}
+
+function renderStart(){
+  stage.innerHTML = `
+    <div class="hero fade">
+      <div class="lead">何を着れば正解か、<br><em>もう迷わない。</em></div>
+      <p>5つの質問に答えるだけ。あなたの体型と雰囲気から、<br>似合う服を具体的にご提案します。</p>
+      <div class="meta">
+        <span><b>5</b>つの質問</span>
+        <span><b>30</b>秒で完了</span>
+      </div>
+      <button class="btn btn-primary" id="start">診断をはじめる</button>
+    </div>`;
+  document.getElementById("start").onclick = ()=>{ step=1; render(); };
+}
+
+function renderQuestion(i){
+  const q = QUESTIONS[i];
+  const bars = QUESTIONS.map((_,idx)=>`<i class="${idx<=i?'on':''}"></i>`).join("");
+  const opts = q.options.map(o=>`
+    <button class="opt" data-v="${o.value}">
+      <span class="k">${o.k}</span><span>${o.label}</span>
+    </button>`).join("");
+  stage.innerHTML = `
+    <div class="fade">
+      <div class="progress">${bars}</div>
+      <div class="q-count">QUESTION ${i+1} / ${QUESTIONS.length}</div>
+      <div class="q-title">${q.title}</div>
+      <div class="options">${opts}</div>
+      ${ i>0 ? '<button class="back" id="back">← ひとつ戻る</button>' : '' }
+    </div>`;
+  stage.querySelectorAll(".opt").forEach(b=>{
+    b.onclick = ()=>{ answers[q.id] = b.dataset.v; step++; render(); window.scrollTo(0,0); };
+  });
+  const back = document.getElementById("back");
+  if(back) back.onclick = ()=>{ step--; render(); };
+}
+
+function renderResult(){
+  owned = [false,false,false];
+  const key = answers.taikei + "-" + answers.funiki;
+  const r = RESULTS[key];
+  const price = PRICE[answers.yosan];
+  const nayami = NAYAMI_LINE[answers.nayami];
+  const scene = SCENE_LABEL[answers.basho];
+
+  const items = r.items.map((it,idx)=>`
+    <div class="item" id="item-${idx}">
+      <div class="thumb">${ICON[it.icon]}</div>
+      <div class="body">
+        <div class="nm">${it.nm}</div>
+        <div class="why">${it.why}</div>
+        <div class="price">目安 ${price}</div>
+        <div class="owned-msg">すでにお持ちですね。</div>
+        <div class="actions">
+          <a class="buy" href="#" onclick="return false;">ここで買える <span>↗</span></a>
+          <button class="have" data-idx="${idx}">
+            <span class="box"></span>持ってる
+          </button>
+        </div>
+      </div>
+    </div>`).join("");
+
+  stage.innerHTML = `
+    <div class="fade">
+      <div class="result-top">
+        <div class="label">YOUR TYPE</div>
+        <div class="name">${r.name}</div>
+        <div class="tagline">${r.tagline}</div>
+      </div>
+
+      <div class="illust">
+        <img src="images/${key}.webp" alt="${r.name}の完成コーデ"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <div class="ph" style="display:none;">
+          <span class="fr">完成コーデのイラスト</span>
+          images/${key}.webp<br>を入れるとここに表示されます
+        </div>
+        <div class="cap">これが、あなたの目指す完成形です</div>
+      </div>
+
+      <div class="reason">
+        ${r.reason}
+        <span class="pin">${nayami}</span>
+      </div>
+
+      <div class="sec-head">
+        <h3>あなたに似合う3着</h3>
+        <span class="scene">${scene}</span>
+      </div>
+      <div class="sec-sub">すでに持っているものは「持ってる」を押してください。買い足すものだけに絞れます。</div>
+
+      ${items}
+
+      <div class="tally" id="tally"></div>
+
+      <div class="next">
+        <button class="btn btn-ghost" id="again">もう一度、診断する</button>
+        <button class="btn btn-ghost" id="read">このタイプ向けの記事を読む</button>
+      </div>
+      <div class="note">
+        ※「ここで買える」は実際のショップ（アフィリエイト）リンクを入れる場所です。<br>
+        現在はデモのため、リンク先は未設定です。
+      </div>
+    </div>`;
+
+  stage.querySelectorAll(".have").forEach(b=>{
+    b.onclick = ()=>{
+      const i = +b.dataset.idx;
+      owned[i] = !owned[i];
+      document.getElementById("item-"+i).classList.toggle("owned", owned[i]);
+      updateTally();
+    };
+  });
+  updateTally();
+
+  document.getElementById("again").onclick = ()=>{ step=0; answers={}; render(); window.scrollTo(0,0); };
+  document.getElementById("read").onclick  = ()=>{ alert("記事一覧ページへ移動します（デモ）"); };
+}
+
+function updateTally(){
+  const need = owned.filter(v=>!v).length;
+  const el = document.getElementById("tally");
+  if(need === 0){
+    el.className = "tally done";
+    el.innerHTML = `<b>3着そろっています。</b><br>あとは着こなしを磨くだけです。`;
+  } else {
+    el.className = "tally";
+    el.innerHTML = `完成まで、あと <b>${need}</b> 着。<br>買い足すものだけに絞れました。`;
+  }
+}
+
+render();
+</script>
+</body>
+</html>
