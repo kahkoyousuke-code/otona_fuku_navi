@@ -9,8 +9,8 @@ export const SITE = {
   url: "https://otona-fuku-navi.vercel.app",
   // 運営者名（個人名 or 屋号）。
   operator: "オトナ服ナビ編集部",
-  // 問い合わせフォームのURL（Googleフォーム等）。★要編集（フォーム作成後に差し替える）
-  contactFormUrl: "（お問い合わせフォームのURL）",
+  // 問い合わせフォームのURL（Googleフォーム）。
+  contactFormUrl: "https://forms.gle/3sD8sz3qAmeA7APX9",
   // サイト開設日。
   since: "2026年6月",
   // 利用しているアフィリエイトプログラム（審査が通ったものを記載）
