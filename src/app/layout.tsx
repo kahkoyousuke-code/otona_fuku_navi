@@ -35,6 +35,10 @@ export const metadata: Metadata = {
     locale: "ja_JP",
     type: "website",
   },
+  // Google Search Console の所有権確認タグ。削除すると確認が外れるので残すこと
+  verification: {
+    google: "ZjWPPXKFHLaA28ucYVXLYd-MO0aZCkUEjSQ96J8qPJE",
+  },
 };
 
 export default function RootLayout({
