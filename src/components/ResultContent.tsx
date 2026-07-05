@@ -164,7 +164,7 @@ export default function ResultContent({ resultKey, result, basho, nayami, yosan 
       </div>
 
       <div style={{ textAlign: "center", fontSize: 11, color: "var(--ink-faint)", marginTop: 26, letterSpacing: ".04em", lineHeight: 1.7 }}>
-        ※「Yahoo!ショッピングで探す」は広告（アフィリエイト）リンクです。
+        ※「ZOZOTOWNで探す」は広告（アフィリエイト）リンクです。
       </div>
     </div>
   );

@@ -159,13 +159,13 @@ Next.js（App Router / Turbopack）+ Vercel 想定で構築済み。`npm run dev
 - `src/data/results.ts` … 6パターンの結果＋アイテム（`keyword` でZOZO/Yahoo検索、`affiliateUrl` で直リンク上書き）
 - `src/data/site.ts` … 運営情報。**公開前に「★要編集」を実値に差し替える**
 - `src/lib/articles.ts` … 記事のfrontmatter解析・一覧・タグ・関連記事
-- `src/lib/affiliate.ts` … `yahooShoppingSearchUrl()` / `itemBuyUrl()`
+- `src/lib/affiliate.ts` … `zozoStoreSearchUrl()` / `itemBuyUrl()`
 - `src/components/` … Quiz系・ResultContent・ItemCard・Tally・ArticleList・TagFilter・RelatedArticles・InfoPage・DiagnosisCta
 
 ### アフィリエイト方針（現状）
-- **Yahoo!ショッピング主軸**（ZOZOTOWN本体の直アフィリエイトは無いため、ZOZOTOWN Yahoo!店を含むYahoo!ショッピング検索にリンク）
-- 各アイテムは `keyword` でYahoo!ショッピング検索に飛ぶ。リンク文言は「Yahoo!ショッピングで探す」、`rel="...sponsored"` 付き
-- **収益化はバリューコマースのLinkSwitch**を `layout.tsx` に1行入れる想定（`shopping.yahoo.co.jp` リンクを自動でアフィリエイト化。URL書き換え不要）。審査通過後にタグを差し込む
+- **Yahoo!ショッピングのZOZOTOWN店主軸**（`store.shopping.yahoo.co.jp/zozo/search.html?p=キーワード` の店内検索にリンク）
+- 各アイテムは `keyword` でZOZO店内検索に飛ぶ。ZOZO店内は女性向け商品も含むため keyword に「メンズ」を残す。リンク文言は「ZOZOTOWNで探す」、`rel="...sponsored"` 付き
+- **収益化はバリューコマースのLinkSwitch**を `layout.tsx` に1行入れる想定（`store.shopping.yahoo.co.jp` を含む `shopping.yahoo.co.jp` リンクを自動でアフィリエイト化。URL書き換え不要）。審査通過後にタグを差し込む
 
 ### 未対応 / 次の候補
 - 結果イラスト `public/images/{キー}.webp` の配置（6枚）

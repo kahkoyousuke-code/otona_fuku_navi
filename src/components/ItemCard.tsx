@@ -102,7 +102,7 @@ export default function ItemCard({ item, price, onOwnedChange }: Props) {
                 transition: ".2s",
               }}
             >
-              Yahoo!ショッピングで探す <span style={{ color: "var(--accent)" }}>↗</span>
+              ZOZOTOWNで探す <span style={{ color: "var(--accent)" }}>↗</span>
             </a>
           )}
           {!owned && !buyUrl && (
