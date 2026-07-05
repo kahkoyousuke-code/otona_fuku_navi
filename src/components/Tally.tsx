@@ -11,6 +11,7 @@ export default function Tally({ total, ownedCount }: Props) {
   if (need === 0) {
     return (
       <div
+        aria-live="polite"
         style={{
           marginTop: 30,
           background: "var(--accent-dark)",
@@ -33,6 +34,7 @@ export default function Tally({ total, ownedCount }: Props) {
 
   return (
     <div
+      aria-live="polite"
       style={{
         marginTop: 30,
         background: "var(--ink)",

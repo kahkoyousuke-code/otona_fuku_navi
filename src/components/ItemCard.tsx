@@ -53,7 +53,7 @@ export default function ItemCard({ item, price, onOwnedChange }: Props) {
           position: "relative",
         }}
       >
-        <span dangerouslySetInnerHTML={{ __html: ICONS[item.icon] }} />
+        <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICONS[item.icon] }} />
         {owned && (
           <span
             style={{
@@ -111,6 +111,8 @@ export default function ItemCard({ item, price, onOwnedChange }: Props) {
 
           <button
             onClick={toggle}
+            aria-pressed={owned}
+            aria-label={`${item.nm}を持ってる`}
             style={{
               background: "none",
               border: "none",

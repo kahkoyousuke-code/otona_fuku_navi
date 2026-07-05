@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { SITE } from "@/data/site";
 import { getArticle, getAllArticleMetas, getRelatedArticles } from "@/lib/articles";
 import DiagnosisCta from "@/components/DiagnosisCta";
 import RelatedArticles from "@/components/RelatedArticles";
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: article.title,
     description: article.description,
+    alternates: { canonical: `/articles/${slug}` },
     openGraph: {
       title: article.title,
       description: article.description,
@@ -55,8 +57,24 @@ export default async function ArticlePage({ params }: Props) {
   const html = markdownToHtml(article.body);
   const related = getRelatedArticles(slug, 3);
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.date,
+    inLanguage: "ja",
+    mainEntityOfPage: `${SITE.url}/articles/${slug}`,
+    author: { "@type": "Organization", name: SITE.operator },
+    publisher: { "@type": "Organization", name: SITE.operator },
+  };
+
   return (
     <div className="wrap" style={{ padding: "40px 24px 56px" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <div style={{ marginBottom: 8, fontSize: 11, color: "var(--ink-faint)", letterSpacing: ".1em" }}>
         {article.date}
       </div>

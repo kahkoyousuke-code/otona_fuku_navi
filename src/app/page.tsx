@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,11 +12,13 @@ export default function TopPage() {
       <div className="fade">
         <div className="hero" style={{ marginBottom: 48 }}>
           <figure className="hero-figure">
-            <img
+            <Image
               src="/images/hero.webp"
               alt="きれいめに装った40代の男性のイラスト"
               width={380}
               height={507}
+              priority
+              sizes="(min-width: 760px) 380px, 100vw"
             />
           </figure>
 

@@ -15,7 +15,14 @@ export default function QuizQuestion({ question, questionIndex, onAnswer, onBack
 
   return (
     <div className="fade">
-      <div style={{ display: "flex", gap: 6, marginBottom: 30 }}>
+      <div
+        role="progressbar"
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-valuenow={questionIndex + 1}
+        aria-label={`質問 ${questionIndex + 1} / ${total}`}
+        style={{ display: "flex", gap: 6, marginBottom: 30 }}
+      >
         {QUESTIONS.map((_, idx) => (
           <i
             key={idx}

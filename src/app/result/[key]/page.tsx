@@ -18,6 +18,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `診断結果: ${result.name}`,
     description: result.reason.slice(0, 80) + "…",
+    // 質問3〜5はクエリパラメータで中身を出し分けるため、正規URLはパラメータなしに集約する
+    alternates: { canonical: `/result/${key}` },
     openGraph: {
       title: `診断結果: ${result.name} | オトナ服ナビ`,
       description: result.reason.slice(0, 80) + "…",

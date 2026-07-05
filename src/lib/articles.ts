@@ -64,6 +64,7 @@ export const TAG_LABELS: Record<string, string> = {
   gasshiri: "がっしり体型",
   hyojun: "標準体型",
   onaka: "お腹まわり",
+  kyasha: "細身体型",
   // 雰囲気
   kireime: "きれいめ",
   casual: "カジュアル",
@@ -82,7 +83,7 @@ export const TAG_LABELS: Record<string, string> = {
 
 /** 絞り込みUIで「体型から探す／悩みから探す」とグループ表示するための分類。 */
 export const TAG_GROUPS: { heading: string; tags: string[] }[] = [
-  { heading: "体型から探す", tags: ["gasshiri", "hyojun", "onaka"] },
+  { heading: "体型から探す", tags: ["gasshiri", "hyojun", "onaka", "kyasha"] },
   { heading: "雰囲気から探す", tags: ["kireime", "casual"] },
   { heading: "悩みから探す", tags: ["fit", "young", "tedious"] },
   { heading: "場面・予算から探す", tags: ["work", "off", "low", "mid", "high"] },

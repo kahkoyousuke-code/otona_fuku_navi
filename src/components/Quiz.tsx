@@ -38,6 +38,7 @@ export default function Quiz() {
 
   function handleBack() {
     setStep(step - 1);
+    window.scrollTo(0, 0);
   }
 
   return (

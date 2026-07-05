@@ -1,8 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import { Shippori_Mincho, Zen_Kaku_Gothic_New } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/data/site";
+
+// 日本語フォントはファイルが大きいため preload しない（unicode-range 分割で必要分のみ取得される）
+const serif = Shippori_Mincho({
+  weight: ["500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-serif",
+});
+
+const sans = Zen_Kaku_Gothic_New({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -24,9 +42,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.url,
+    description:
+      "5つの質問に答えるだけ。体型と雰囲気から、あなたに似合う服を具体的にご提案します。",
+    publisher: { "@type": "Organization", name: SITE.operator },
+  };
+
   return (
-    <html lang="ja">
+    <html lang="ja" className={`${serif.variable} ${sans.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {/* バリューコマース LinkSwitch：shopping.yahoo.co.jp 等のリンクを自動でアフィリエイト化。
             同一 strategy のスクリプトは記述順に実行されるため、vc_pid 定義 → vcdal.js の順に置く */}
         <Script id="vc-linkswitch-pid" strategy="afterInteractive">
@@ -38,8 +70,10 @@ export default function RootLayout({
         />
 
         <header className="site-header">
-          <div className="site-mark">オトナ服ナビ</div>
-          <div className="site-sub">F O R &nbsp; M E N &nbsp; 3 0 – 5 0</div>
+          <Link href="/" className="site-mark-link" aria-label="オトナ服ナビ トップページ">
+            <div className="site-mark">オトナ服ナビ</div>
+            <div className="site-sub">F O R &nbsp; M E N &nbsp; 3 0 – 5 0</div>
+          </Link>
         </header>
 
         <main style={{ flex: 1 }}>{children}</main>
@@ -61,7 +95,14 @@ export default function RootLayout({
             padding: 36px 0 8px;
             border-bottom: 1px solid var(--line);
           }
+          .site-mark-link {
+            display: inline-block;
+          }
+          .site-mark-link:hover .site-mark {
+            color: var(--accent-dark);
+          }
           .site-mark {
+            transition: color .2s;
             font-family: var(--serif);
             font-weight: 600;
             font-size: 20px;
