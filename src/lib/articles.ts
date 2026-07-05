@@ -9,6 +9,8 @@ export interface ArticleMeta {
   description: string;
   date: string;
   tags?: string[];
+  /** 通常コラムと分けて一覧上部に特集表示する記事。frontmatter の featured: true で指定。 */
+  featured?: boolean;
 }
 
 export interface Article extends ArticleMeta {
@@ -53,9 +55,20 @@ export function getAllArticleMetas(): ArticleMeta[] {
         description: String(meta.description ?? ""),
         date: String(meta.date ?? ""),
         tags: Array.isArray(meta.tags) ? meta.tags : undefined,
+        featured: meta.featured === "true",
       };
     })
     .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/** 特集記事（featured: true）を新しい順で返す。 */
+export function getFeaturedArticleMetas(): ArticleMeta[] {
+  return getAllArticleMetas().filter((a) => a.featured);
+}
+
+/** 通常コラム一覧に載せる記事（特集を除く）を新しい順で返す。 */
+export function getListedArticleMetas(): ArticleMeta[] {
+  return getAllArticleMetas().filter((a) => !a.featured);
 }
 
 /** タグの日本語ラベル。表示・タグページの見出しに使う。 */
@@ -153,6 +166,7 @@ export function getArticle(slug: string): Article | null {
     description: String(meta.description ?? ""),
     date: String(meta.date ?? ""),
     tags: Array.isArray(meta.tags) ? meta.tags : undefined,
+    featured: meta.featured === "true",
     body,
   };
 }
