@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { getFeaturedArticleMetas, getListedArticleMetas } from "@/lib/articles";
+import {
+  getArticlePageCount,
+  getFeaturedArticleMetas,
+  getListedArticleMetasByPage,
+} from "@/lib/articles";
 import ArticleList from "@/components/ArticleList";
 import FeaturedArticle from "@/components/FeaturedArticle";
 import TagFilter from "@/components/TagFilter";
+import Pagination from "@/components/Pagination";
 import DiagnosisCta from "@/components/DiagnosisCta";
 
 export const metadata: Metadata = {
@@ -12,7 +17,8 @@ export const metadata: Metadata = {
 
 export default function ArticlesPage() {
   const featured = getFeaturedArticleMetas();
-  const articles = getListedArticleMetas();
+  const articles = getListedArticleMetasByPage(1);
+  const totalPages = getArticlePageCount();
 
   return (
     <div className="wrap" style={{ padding: "40px 24px 56px" }}>
@@ -35,6 +41,8 @@ export default function ArticlesPage() {
       <TagFilter />
 
       <ArticleList articles={articles} />
+
+      <Pagination currentPage={1} totalPages={totalPages} />
 
       <DiagnosisCta />
     </div>

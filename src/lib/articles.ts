@@ -71,6 +71,20 @@ export function getListedArticleMetas(): ArticleMeta[] {
   return getAllArticleMetas().filter((a) => !a.featured);
 }
 
+/** 記事一覧の1ページあたりの表示件数。 */
+export const ARTICLES_PER_PAGE = 12;
+
+/** 通常コラムの総ページ数（最低1）。 */
+export function getArticlePageCount(): number {
+  return Math.max(1, Math.ceil(getListedArticleMetas().length / ARTICLES_PER_PAGE));
+}
+
+/** 通常コラムを指定ページ分だけ切り出して返す（page は1始まり）。 */
+export function getListedArticleMetasByPage(page: number): ArticleMeta[] {
+  const start = (page - 1) * ARTICLES_PER_PAGE;
+  return getListedArticleMetas().slice(start, start + ARTICLES_PER_PAGE);
+}
+
 /** タグの日本語ラベル。表示・タグページの見出しに使う。 */
 export const TAG_LABELS: Record<string, string> = {
   // 体型

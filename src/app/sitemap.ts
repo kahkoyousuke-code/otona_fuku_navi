@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/data/site";
 import { RESULTS } from "@/data/results";
-import { getAllArticleMetas, getAllUsedTags } from "@/lib/articles";
+import { getAllArticleMetas, getAllUsedTags, getArticlePageCount } from "@/lib/articles";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const articles = getAllArticleMetas();
@@ -41,5 +41,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.4,
   }));
 
-  return [...staticPages, ...resultPages, ...articlePages, ...tagPages];
+  // 記事一覧の2ページ目以降（1ページ目は /articles として上に含む）。
+  const pageCount = getArticlePageCount();
+  const listPages: MetadataRoute.Sitemap = Array.from(
+    { length: Math.max(0, pageCount - 1) },
+    (_, i) => ({
+      url: `${SITE.url}/articles/page/${i + 2}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.4,
+    })
+  );
+
+  return [...staticPages, ...resultPages, ...articlePages, ...tagPages, ...listPages];
 }
