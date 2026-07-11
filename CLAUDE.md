@@ -165,10 +165,9 @@ Next.js（App Router / Turbopack）+ Vercel 想定で構築済み。`npm run dev
 ### アフィリエイト方針（現状）
 - **Yahoo!ショッピングのZOZOTOWN店主軸**（`store.shopping.yahoo.co.jp/zozo/search.html?p=キーワード` の店内検索にリンク）
 - 各アイテムは `keyword` でZOZO店内検索に飛ぶ。ZOZO店内は女性向け商品も含むため keyword に「メンズ」を残す。リンク文言は「ZOZOTOWNで探す」、`rel="...sponsored"` 付き
-- **収益化はバリューコマースのLinkSwitch**を `layout.tsx` に1行入れる想定（`store.shopping.yahoo.co.jp` を含む `shopping.yahoo.co.jp` リンクを自動でアフィリエイト化。URL書き換え不要）。審査通過後にタグを差し込む
+- **収益化はバリューコマースのLinkSwitch**を `layout.tsx` に設置済み（`vc_pid` 定義 → `vcdal.js` の順、`strategy="afterInteractive"`）。`store.shopping.yahoo.co.jp` を含む `shopping.yahoo.co.jp` リンクを自動でアフィリエイト化（URL書き換え不要）。稼働にはYahoo!ショッピングとの提携承認＋本番ドメインのサイト登録が前提
 
 ### 未対応 / 次の候補
-- 結果イラスト `public/images/{キー}.webp` の配置（6枚）
-- バリューコマース LinkSwitch タグの設置（審査後）
-- `site.ts` の運営情報（url / operator / email / since）の実値入力
-- 一覧のページネーション（記事増加に応じて。タグ絞り込みで当面は緩和）
+- 結果イラスト・`site.ts` 運営情報・一覧ページネーションは実装済み
+- 記事一覧は1ページ12本のパス方式ページネーション（`/articles` = 1ページ目、`/articles/page/n` 以降）。`ARTICLES_PER_PAGE` / `getArticlePageCount()` / `getListedArticleMetasByPage()` と `components/Pagination.tsx`
+- バリューコマース提携承認後、実際に成果計測が動くか本番で確認
