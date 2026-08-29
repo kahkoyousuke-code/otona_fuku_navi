@@ -66,7 +66,7 @@ export default function RootLayout({
         {/* バリューコマース LinkSwitch：shopping.yahoo.co.jp 等のリンクを自動でアフィリエイト化。
             同一 strategy のスクリプトは記述順に実行されるため、vc_pid 定義 → vcdal.js の順に置く */}
         <Script id="vc-linkswitch-pid" strategy="afterInteractive">
-          {`var vc_pid = "886164126";`}
+          {`var vc_pid = "892652293";`}
         </Script>
         <Script
           src="https://aml.valuecommerce.com/vcdal.js"
