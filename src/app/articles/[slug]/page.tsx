@@ -32,21 +32,41 @@ export function generateStaticParams() {
 }
 
 function markdownToHtml(md: string): string {
-  return md
-    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-    .replace(/^# (.+)$/gm, "<h1>$1</h1>")
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/^- (.+)$/gm, "<li>$1</li>")
-    .replace(/(<li>.*<\/li>\n?)+/g, (m) => `<ul>${m}</ul>`)
-    .replace(/\n\n/g, "</p><p>")
-    .replace(/^(?!<[hul])/gm, "")
-    .replace(/^(.+)$/gm, (line) => {
-      if (/^<[hul]/.test(line)) return line;
-      return `<p>${line}</p>`;
-    })
-    .replace(/<p><\/p>/g, "");
+  const inline = (s: string) =>
+    s
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+
+  const out: string[] = [];
+  let items: string[] = [];
+
+  const flushList = () => {
+    if (items.length === 0) return;
+    out.push(`<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`);
+    items = [];
+  };
+
+  for (const raw of md.split("\n")) {
+    const line = raw.trim();
+    const heading = /^(#{1,3}) (.+)$/.exec(line);
+
+    if (line.startsWith("- ")) {
+      items.push(inline(line.slice(2)));
+      continue;
+    }
+    flushList();
+
+    if (!line) continue;
+    if (heading) {
+      const level = heading[1].length;
+      out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
+    } else {
+      out.push(`<p>${inline(line)}</p>`);
+    }
+  }
+  flushList();
+
+  return out.join("");
 }
 
 export default async function ArticlePage({ params }: Props) {
