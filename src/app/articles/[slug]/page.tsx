@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SITE } from "@/data/site";
 import { getArticle, getAllArticleMetas, getRelatedArticles } from "@/lib/articles";
+import { getArticleItems } from "@/data/articleItems";
+import ArticleItems from "@/components/ArticleItems";
 import DiagnosisCta from "@/components/DiagnosisCta";
 import RelatedArticles from "@/components/RelatedArticles";
 
@@ -75,6 +77,7 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound();
 
   const html = markdownToHtml(article.body);
+  const items = getArticleItems(slug);
   const related = getRelatedArticles(slug, 3);
 
   const articleJsonLd = {
@@ -114,6 +117,8 @@ export default async function ArticlePage({ params }: Props) {
         className="article-body"
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      <ArticleItems items={items} />
 
       <RelatedArticles articles={related} />
 
