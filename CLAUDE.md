@@ -149,7 +149,7 @@ Next.js（App Router / Turbopack）+ Vercel 想定で構築済み。`npm run dev
   - 質問1×質問2で6パターンのキーに振り分け（`Quiz.tsx`）。質問3・4・5は結果ページの中身（場面ラベル／締めの一文／価格目安）に反映
   - 結果ページに「持ってる」トグル・買い足し集計・イラスト枠（未配置でも崩れない）を実装
 - **6パターンすべての結果データ**：`src/data/results.ts`（名前・タグライン・判定理由・おすすめ3着）
-- **記事システム**：`content/articles/*.md`（frontmatter: title / description / date / tags）を置くだけで一覧・個別ページ・OGP・診断CTAが自動生成。現在 **41本**
+- **記事システム**：`content/articles/*.md`（frontmatter: title / description / date / tags）を置くだけで一覧・個別ページ・OGP・診断CTAが自動生成。現在 **60本**
   - Markdown対応記法は `##`/`###`・`**太字**`・`*斜体*`・`- 箇条書き`・段落のみ。**リンク記法 `[]()` と番号リスト `1.` は非対応**（表示が崩れるので使わない）
   - タグ絞り込み（`/articles/tag/[tag]`）と記事末尾の関連記事「あわせて読みたい」を実装。タグの日本語ラベル・グループ分けは `lib/articles.ts` の `TAG_LABELS` / `TAG_GROUPS`
 - **法律・信頼ページ**：`/about`（運営者情報）`/contact`（お問い合わせ）`/privacy`（プライバシーポリシー）`/disclosure`（広告表記）。フッターからリンク済み
