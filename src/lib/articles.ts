@@ -147,25 +147,59 @@ export function getAllUsedTags(): string[] {
 }
 
 /**
+ * ピラー記事（柱）：サイトの中心に据えるテーマの記事。
+ * どの記事の関連記事欄にも必ず 1 枠入れ、内部リンクを集中させて検索順位を押し上げる。
+ * タグが噛み合う記事では通常の関連度順で出るため、ここでの差し込みは
+ * タグが噛み合わない記事の救済として働く。
+ */
+const PILLAR_SLUGS = ["niawau-fuku-wakaranai"];
+
+/**
  * 関連記事：同じタグを多く共有する記事を、共有数の多い順に最大 limit 件返す。
  * 自分自身は除外する。
+ * 結果にピラー記事が含まれない場合は、最後の 1 枠をピラー記事に差し替える。
  */
 export function getRelatedArticles(slug: string, limit = 3): ArticleMeta[] {
   const all = getAllArticleMetas();
   const current = all.find((a) => a.slug === slug);
-  if (!current?.tags?.length) return [];
-  const currentTags = new Set(current.tags);
+  const currentTags = new Set(current?.tags ?? []);
 
-  return all
-    .filter((a) => a.slug !== slug && a.tags?.length)
-    .map((a) => ({
-      meta: a,
-      shared: a.tags!.filter((t) => currentTags.has(t)).length,
-    }))
-    .filter((x) => x.shared > 0)
-    .sort((a, b) => b.shared - a.shared || b.meta.date.localeCompare(a.meta.date))
-    .slice(0, limit)
-    .map((x) => x.meta);
+  const byTag = currentTags.size
+    ? all
+        .filter((a) => a.slug !== slug && a.tags?.length)
+        .map((a) => ({
+          meta: a,
+          shared: a.tags!.filter((t) => currentTags.has(t)).length,
+        }))
+        .filter((x) => x.shared > 0)
+        .sort((a, b) => b.shared - a.shared || b.meta.date.localeCompare(a.meta.date))
+        .slice(0, limit)
+        .map((x) => x.meta)
+    : [];
+
+  return withPillar(byTag, slug, limit, all);
+}
+
+/**
+ * 関連記事のリストにピラー記事を 1 件ねじ込む。
+ * すでに含まれているか、自分自身がピラー記事なら何もしない。
+ * 枠が埋まっている場合は末尾と入れ替える（関連度の高い記事を優先して残す）。
+ */
+function withPillar(
+  articles: ArticleMeta[],
+  slug: string,
+  limit: number,
+  all: ArticleMeta[],
+): ArticleMeta[] {
+  if (PILLAR_SLUGS.includes(slug)) return articles;
+  if (articles.some((a) => PILLAR_SLUGS.includes(a.slug))) return articles;
+
+  const pillar = all.find((a) => PILLAR_SLUGS.includes(a.slug));
+  if (!pillar) return articles;
+
+  return articles.length < limit
+    ? [...articles, pillar]
+    : [...articles.slice(0, limit - 1), pillar];
 }
 
 export function getArticle(slug: string): Article | null {
