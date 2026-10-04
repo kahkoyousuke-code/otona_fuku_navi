@@ -155,8 +155,16 @@ export function getAllUsedTags(): string[] {
 const PILLAR_SLUGS = ["niawau-fuku-wakaranai"];
 
 /**
+ * 関連記事を手で指定する記事。指定した記事を先頭に並べ、残りの枠はタグ関連度で埋める。
+ * 季節外れの記事に来た人を、今の季節の記事へ送るために使う。
+ */
+const RELATED_OVERRIDES: Record<string, string[]> = {
+  "polo-shirt-otona": ["otona-knit-erabikata", "11gatsu-fukusou"],
+};
+
+/**
  * 関連記事：同じタグを多く共有する記事を、共有数の多い順に最大 limit 件返す。
- * 自分自身は除外する。
+ * 自分自身は除外する。RELATED_OVERRIDES に指定があればそれを先頭に置く。
  * 結果にピラー記事が含まれない場合は、最後の 1 枠をピラー記事に差し替える。
  */
 export function getRelatedArticles(slug: string, limit = 3): ArticleMeta[] {
@@ -164,20 +172,26 @@ export function getRelatedArticles(slug: string, limit = 3): ArticleMeta[] {
   const current = all.find((a) => a.slug === slug);
   const currentTags = new Set(current?.tags ?? []);
 
+  const pinned = (RELATED_OVERRIDES[slug] ?? [])
+    .map((s) => all.find((a) => a.slug === s))
+    .filter((a): a is ArticleMeta => !!a)
+    .slice(0, limit);
+  const pinnedSlugs = new Set(pinned.map((a) => a.slug));
+
   const byTag = currentTags.size
     ? all
-        .filter((a) => a.slug !== slug && a.tags?.length)
+        .filter((a) => a.slug !== slug && !pinnedSlugs.has(a.slug) && a.tags?.length)
         .map((a) => ({
           meta: a,
           shared: a.tags!.filter((t) => currentTags.has(t)).length,
         }))
         .filter((x) => x.shared > 0)
         .sort((a, b) => b.shared - a.shared || b.meta.date.localeCompare(a.meta.date))
-        .slice(0, limit)
+        .slice(0, limit - pinned.length)
         .map((x) => x.meta)
     : [];
 
-  return withPillar(byTag, slug, limit, all);
+  return withPillar([...pinned, ...byTag], slug, limit, all);
 }
 
 /**
