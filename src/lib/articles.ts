@@ -160,6 +160,7 @@ const PILLAR_SLUGS = ["niawau-fuku-wakaranai"];
  */
 const RELATED_OVERRIDES: Record<string, string[]> = {
   "polo-shirt-otona": ["otona-knit-erabikata", "11gatsu-fukusou"],
+  "12gatsu-fukusou": ["onaka-coat-erabikata", "hosomi-down-hinso"],
 };
 
 /**
