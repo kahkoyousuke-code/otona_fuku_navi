@@ -86,6 +86,7 @@ export default async function ArticlePage({ params }: Props) {
     headline: article.title,
     description: article.description,
     datePublished: article.date,
+    dateModified: article.updated ?? article.date,
     inLanguage: "ja",
     mainEntityOfPage: `${SITE.url}/articles/${slug}`,
     author: { "@type": "Organization", name: SITE.operator },
@@ -100,6 +101,7 @@ export default async function ArticlePage({ params }: Props) {
       />
       <div style={{ marginBottom: 8, fontSize: 11, color: "var(--ink-faint)", letterSpacing: ".1em" }}>
         {article.date}
+        {article.updated && article.updated !== article.date && `（${article.updated} 更新）`}
       </div>
       <h1
         style={{

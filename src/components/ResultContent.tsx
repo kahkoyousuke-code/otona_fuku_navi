@@ -158,7 +158,7 @@ export default function ResultContent({ resultKey, result, basho, nayami, yosan 
         <Link href="/shindan" className="btn-ghost">
           もう一度、診断する
         </Link>
-        <Link href="/articles" className="btn-ghost">
+        <Link href={`/articles/tag/${resultKey.split("-")[0]}`} className="btn-ghost">
           このタイプ向けの記事を読む
         </Link>
       </div>

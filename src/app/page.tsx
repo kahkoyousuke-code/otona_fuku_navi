@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { getFeaturedArticleMetas } from "@/lib/articles";
+import { getFeaturedArticleMetas, tagLabel } from "@/lib/articles";
+
+const BODY_TYPES = ["gasshiri", "hyojun", "onaka", "kyasha"];
 
 export const metadata: Metadata = {
   title: "オトナ服ナビ | FOR MEN 30–50",
@@ -80,6 +82,13 @@ export default function TopPage() {
           <p style={{ fontSize: 12, color: "var(--ink-faint)", textAlign: "center", letterSpacing: ".08em", marginBottom: 16 }}>
             タイプ別に読む
           </p>
+          <div className="body-type-grid">
+            {BODY_TYPES.map((t) => (
+              <Link key={t} href={`/articles/tag/${t}`} className="btn-ghost">
+                {tagLabel(t)}の服選び
+              </Link>
+            ))}
+          </div>
           <Link
             href="/articles"
             style={{ display: "block", textAlign: "center", fontSize: 14, color: "var(--ink-soft)", letterSpacing: ".06em", padding: "12px 0" }}

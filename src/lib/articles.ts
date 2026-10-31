@@ -8,6 +8,8 @@ export interface ArticleMeta {
   title: string;
   description: string;
   date: string;
+  /** 大きく書き直した日。frontmatter の updated で指定（dateModified・サイトマップに使う）。 */
+  updated?: string;
   tags?: string[];
   /** 通常コラムと分けて一覧上部に特集表示する記事。frontmatter の featured: true で指定。 */
   featured?: boolean;
@@ -54,6 +56,7 @@ export function getAllArticleMetas(): ArticleMeta[] {
         title: String(meta.title ?? slug),
         description: String(meta.description ?? ""),
         date: String(meta.date ?? ""),
+        updated: meta.updated ? String(meta.updated) : undefined,
         tags: Array.isArray(meta.tags) ? meta.tags : undefined,
         featured: meta.featured === "true",
       };
@@ -228,6 +231,7 @@ export function getArticle(slug: string): Article | null {
     title: String(meta.title ?? slug),
     description: String(meta.description ?? ""),
     date: String(meta.date ?? ""),
+    updated: meta.updated ? String(meta.updated) : undefined,
     tags: Array.isArray(meta.tags) ? meta.tags : undefined,
     featured: meta.featured === "true",
     body,
