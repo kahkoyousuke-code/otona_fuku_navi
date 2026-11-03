@@ -6,6 +6,7 @@ import {
 } from "@/lib/articles";
 import ArticleList from "@/components/ArticleList";
 import FeaturedArticle from "@/components/FeaturedArticle";
+import StarterGuide from "@/components/StarterGuide";
 import TagFilter from "@/components/TagFilter";
 import Pagination from "@/components/Pagination";
 import DiagnosisCta from "@/components/DiagnosisCta";
@@ -35,6 +36,8 @@ export default function ArticlesPage() {
       <p style={{ color: "var(--ink-faint)", fontSize: 13, marginBottom: 28 }}>
         40・50代男性のファッションコラム
       </p>
+
+      <StarterGuide />
 
       <FeaturedArticle articles={featured} />
 

@@ -158,6 +158,36 @@ export function getAllUsedTags(): string[] {
 const PILLAR_SLUGS = ["niawau-fuku-wakaranai"];
 
 /**
+ * 記事一覧の「まずはこれ」枠。体型ごとに、基本の1本＋検索で強い冬アイテムの1本を並べる。
+ * 季節が変わったら2本目を差し替える。
+ */
+const STARTER_GUIDE: { tag: string; slugs: string[] }[] = [
+  { tag: "gasshiri", slugs: ["gasshiri-fuku-ni-kirarenai", "gasshiri-knit-pichipichi"] },
+  { tag: "hyojun", slugs: ["hyojun-kireime-guide", "hyojun-casual-konare"] },
+  { tag: "onaka", slugs: ["onaka-kiyase-coordinate", "onaka-knit-erabikata"] },
+  { tag: "kyasha", slugs: ["kyasha-hinso-ni-mienai", "hosomi-coat-kirarenai"] },
+];
+
+export interface StarterGuide {
+  /** 体型を問わず最初に読んでほしい記事（ピラー記事）。 */
+  pillar?: ArticleMeta;
+  groups: { tag: string; articles: ArticleMeta[] }[];
+}
+
+/** 「まずはこれ」枠のデータ。存在しない slug は黙って飛ばす。 */
+export function getStarterGuide(): StarterGuide {
+  const all = getAllArticleMetas();
+  const find = (s: string) => all.find((a) => a.slug === s);
+  return {
+    pillar: find(PILLAR_SLUGS[0]),
+    groups: STARTER_GUIDE.map((g) => ({
+      tag: g.tag,
+      articles: g.slugs.map(find).filter((a): a is ArticleMeta => !!a),
+    })).filter((g) => g.articles.length > 0),
+  };
+}
+
+/**
  * 関連記事を手で指定する記事。指定した記事を先頭に並べ、残りの枠はタグ関連度で埋める。
  * 季節外れの記事に来た人を、今の季節の記事へ送るために使う。
  */
